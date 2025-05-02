@@ -34,7 +34,7 @@ jobs:
           cp -R build/Release-iphoneos/Tracky.app artifacts/
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Tracky-app
           path: artifacts/Tracky.app
