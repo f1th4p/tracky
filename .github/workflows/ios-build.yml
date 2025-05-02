@@ -18,22 +18,23 @@ jobs:
         with:
           xcode-version: '16.2'
 
-      - name: Build Tracky
+      - name: Build Archive
         run: |
           xcodebuild \
             -project Tracky/Tracky.xcodeproj \
             -scheme Tracky \
             -sdk iphoneos \
             -configuration Release \
-            CODE_SIGNING_ALLOWED=NO \
-            BUILD_DIR=build
+            -archivePath $PWD/build/Tracky.xcarchive \
+            archive \
+            CODE_SIGNING_ALLOWED=NO
 
-      - name: Archive .app
+      - name: Export .app from archive
         run: |
           mkdir -p artifacts
-          cp -R build/Release-iphoneos/Tracky.app artifacts/
+          cp -R build/Tracky.xcarchive/Products/Applications/Tracky.app artifacts/
 
-      - name: Upload artifact
+      - name: Upload .app artifact
         uses: actions/upload-artifact@v4
         with:
           name: Tracky-app
