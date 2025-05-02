@@ -1,0 +1,40 @@
+name: Build Tracky iOS App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Xcode 14.2
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '14.2'
+
+      - name: Build Tracky
+        run: |
+          xcodebuild \
+            -project Tracky/Tracky.xcodeproj \
+            -scheme Tracky \
+            -sdk iphoneos \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            BUILD_DIR=build
+
+      - name: Archive .app
+        run: |
+          mkdir -p artifacts
+          cp -R build/Release-iphoneos/Tracky.app artifacts/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Tracky-app
+          path: artifacts/Tracky.app
